@@ -1,4 +1,5 @@
 from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django_recaptcha.fields import ReCaptchaField
 from .forms import UserCreation
@@ -35,10 +36,14 @@ def logout_view(request):
     return redirect('/')
 
 
-class ListOfDishes(ListView):
-    model = Dish
-    template_name = 'restaurant/main.html'
-    context_object_name = 'dish'
+def ListOfDishes(request):
+    model = Dish.objects.all()
+    return render(request, 'restaurant/main.html', {'model': model})
+
+
+def ListOfDishesSoda(request):
+    model = Dish.objects.filter(type='soda')
+    return render(request, 'restaurant/main.html', {'model': model})
 
 
 class DetailDish(DetailView):

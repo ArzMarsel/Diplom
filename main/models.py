@@ -12,18 +12,28 @@ class Dish(models.Model):
         ('none', 'Заказать'),
         ('delivering', 'Доставляеться'),
         ('cooking', 'Готовиться'),
-        ('accepted', 'Принят'),
-        ('none', 'none')
+        ('accepted', 'Принят')
+    )
+    Type_list = (
+        ('soda', 'Напитки'),
+        ('desert', 'Десерты'),
+        ('first', 'Первое'),
+        ('salat', 'Салаты'),
+        ('sec', 'Второе'),
+        ("fast", "Фаст-фуд"),
+        ("alco", "Алкоголь"),
+        ("tuck", "Закуски"),
     )
     name = models.CharField('Name', max_length=30)
     info = models.TextField('Information')
     price = models.FloatField('Price')
     status = models.CharField(verbose_name='Status:', max_length=30, choices=Choices_list)
     images = models.ManyToManyField(DishImage, verbose_name='Images')
-    quantity = models.IntegerField(verbose_name='Кол-во:', blank=True)
+    quantity = models.IntegerField(verbose_name='Кол-во:', blank=True, null=True)
+    kind = models.CharField(verbose_name='Type:', max_length=30, choices=Type_list)
 
 
 class Connect(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    dish = models.ForeignKey(Dish, on_delete=models.CASCADE, blank=True)
+    dish = models.ForeignKey(Dish, on_delete=models.CASCADE, blank=True, null=True)
 
