@@ -87,12 +87,15 @@ def ListOfDishesFirst(request):
 
 
 def DetailDish(request, pk):
-    model = get_object_or_404(Dish, pk=pk)
+    dish1 = get_object_or_404(Dish, pk=pk)
     is_profiled = False
-    model2 = DishImage.objects.filter(pk=pk)
+    model = DishImage.objects.filter(pk=pk)
+    images = []
+    for i in model:
+        images.append(i)
     if request.user.is_authenticated:
-        is_profiled = Dish.objects.filter(user=request.user, tour=tour).exists()
-    return render(request, 'restaurant/more_dish.html')
+        is_profiled = Dish.objects.filter(user=request.user, dish=dish1).exists()
+    return render(request, 'restaurant/more_dish.html', context={'is_pro': is_profiled, 'dish1': dish1, 'model': model})
 
 
 def connect_to_corsina(request):

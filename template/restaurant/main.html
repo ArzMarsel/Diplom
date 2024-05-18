@@ -49,6 +49,9 @@
                 <li><a class="dropdown-item" href="{% url 'soda' %}">Напитки</a></li>
           </ul>
         </li>
+          <li class="nav-item">
+              <a href="{% url 'corsina' %}">Корзина</a>
+          </li>
       </ul>
     </div>
   </div>
@@ -57,8 +60,8 @@
 {% for el in model %}
     <div class="col-md-4 mb-4">
         <div class="card">
-            {% for image in el.images.all %}
-                <img src="{{ image.image.url }}" class="card-img-top" alt="...">
+            {% for image in el.images %}
+                <img src="{{ image.image.url.first }}" class="card-img-top" alt="...">
             {% endfor %}
             <div class="card-body">
                 <h5 class="card-title">{{ el.name }}</h5>

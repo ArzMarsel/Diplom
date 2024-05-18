@@ -17,4 +17,5 @@ urlpatterns = [
     path('/fast', views.ListOfDishesFast, name='fast'),
     path('/salat', views.ListOfDishesSalat, name='salat'),
     path('/tuck', views.ListOfDishesTuck, name='tuck'),
+    path('corsina/', views.connect_to_corsina, name='corsina'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
