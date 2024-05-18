@@ -2,10 +2,6 @@ from django.contrib.auth.models import User
 from django.db import models
 
 
-class DishImage(models.Model):
-    image = models.ImageField('Image:', upload_to='product_image/')
-
-
 class Dish(models.Model):
     Choices_list = (
         ('done', 'Заказано'),
@@ -28,9 +24,13 @@ class Dish(models.Model):
     info = models.TextField('Information')
     price = models.FloatField('Price')
     status = models.CharField(verbose_name='Status:', max_length=30, choices=Choices_list)
-    images = models.ManyToManyField(DishImage, verbose_name='Images')
     quantity = models.IntegerField(verbose_name='Кол-во:', blank=True, null=True)
     kind = models.CharField(verbose_name='Type:', max_length=30, choices=Type_list)
+
+
+class DishImage(models.Model):
+    image = models.ImageField('Image:', upload_to='product_image/')
+    dishes = models.ManyToManyField(Dish, verbose_name='Dishes:')
 
 
 class Connect(models.Model):

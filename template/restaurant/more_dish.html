@@ -25,18 +25,26 @@
             Ещё
           </a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="{% url 'register' %}">Регистрация</a></li>
+              {% if user.is_authenticated %}
+              <li><a class="dropdown-item" href="{% url 'logout' %}">Выход</a></li>
+              {% else %}
+              <li><a class="dropdown-item" href="{% url 'register' %}">Регистрация</a></li>
             <li><a class="dropdown-item" href="{% url 'login' %}">Вход</a></li>
+              {% endif %}
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="#">О нас</a></li>
           </ul>
-        </li>
       </ul>
     </div>
   </div>
 </nav>
 </header>
-{% for i in dish %}
+{% for el in model %}
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            {% for image in el.images.all %}
+                <img src="{{ image.image.url }}" class="card-img-top" alt="...">
+            {% endfor %}
 <div id="carouselExampleIndicators" class="carousel slide">
   <div class="carousel-indicators">
     <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>

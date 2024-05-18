@@ -39,14 +39,14 @@
             Сортировка
           </a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="{% url 'logout' %}">Первое</a></li>
-              <li><a class="dropdown-item" href="{% url 'register' %}">Второе</a></li>
-            <li><a class="dropdown-item" href="{% url 'login' %}">Закуски</a></li>
-                <li><a class="dropdown-item" href="{% url 'login' %}">Десерты</a></li>
-                <li><a class="dropdown-item" href="{% url 'login' %}">Фаст-фуд</a></li>
-                <li><a class="dropdown-item" href="{% url 'login' %}">Салаты</a></li>
-                <li><a class="dropdown-item" href="{% url 'login' %}">Алкоголь</a></li>
-                <li><a class="dropdown-item" href="{% url 'bysoda' %}">Напитки</a></li>
+              <li><a class="dropdown-item" href="{% url 'first' %}">Первое</a></li>
+              <li><a class="dropdown-item" href="{% url 'sec' %}">Второе</a></li>
+            <li><a class="dropdown-item" href="{% url 'tuck' %}">Закуски</a></li>
+                <li><a class="dropdown-item" href="{% url 'desert' %}">Десерты</a></li>
+                <li><a class="dropdown-item" href="{% url 'fast' %}">Фаст-фуд</a></li>
+                <li><a class="dropdown-item" href="{% url 'salat' %}">Салаты</a></li>
+                <li><a class="dropdown-item" href="{% url 'alco' %}">Алкоголь</a></li>
+                <li><a class="dropdown-item" href="{% url 'soda' %}">Напитки</a></li>
           </ul>
         </li>
       </ul>
@@ -54,21 +54,21 @@
   </div>
 </nav>
 </header>
-<div class="row">
 {% for el in model %}
     <div class="col-md-4 mb-4">
         <div class="card">
-            <img src="{{ el.images.1 }}" class="card-img-top" alt="...">
+            {% for image in el.images.all %}
+                <img src="{{ image.image.url }}" class="card-img-top" alt="...">
+            {% endfor %}
             <div class="card-body">
                 <h5 class="card-title">{{ el.name }}</h5>
                 <p class="card-text">{{ el.info }}</p>
-                <a href="{% url 'more' el.id %}">Подробнее</a>
-                <button type="button" class="btn btn-dark btn-sm">{{ el.status }}</button>
+                <a href="{% url 'more' el.id %}" class="btn btn-primary">Подробнее</a>
+                <button type="button" class="btn btn-dark btn-sm">{{ el.get_status_display }}</button>
             </div>
         </div>
     </div>
 {% endfor %}
-</div>
            <button class="fools">
     <span> < </span>
   </button>
