@@ -4,7 +4,6 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django_recaptcha.fields import ReCaptchaField
 from .forms import UserCreation, LoginForm
-from django.views.generic import DetailView
 from .models import Dish, Connect, DishImage
 
 
@@ -15,9 +14,8 @@ def user_login(request):
         if form.is_valid():
             cd = form.cleaned_data
             user = authenticate(username=cd['username'], password1=cd['password1'])
-            if user is not None:
-                login(request, user)
-                return redirect('/')
+            login(request, user)
+            return redirect('/')
     else:
         form = LoginForm(request.POST)
     return render(request, 'register/login.html', {'form': form})
@@ -42,7 +40,8 @@ def logout_view(request):
 
 def ListOfDishes(request):
     model = Dish.objects.all()
-    return render(request, 'restaurant/main.html', {'model': model})
+    model1 = DishImage.objects.all()
+    return render(request, 'restaurant/main.html', {'model': model, 'model1': model1[::3]})
 
 
 def ListOfDishesSoda(request):
@@ -83,21 +82,25 @@ def ListOfDishesAlco(request):
 
 def ListOfDishesFirst(request):
     model = Dish.objects.filter(kind='first')
-    return render(request, 'restaurant/main.html', {'model': model})
+    model1 = DishImage.objects.all()
+    return render(request, 'restaurant/main.html', {'model': model, 'model1': model1[1:3]})
 
 
+@login_required(login_url='login')
 def DetailDish(request, pk):
-    dish1 = get_object_or_404(Dish, pk=pk)
-    is_profiled = False
-    model = DishImage.objects.filter(pk=pk)
-    images = []
-    for i in model:
-        images.append(i)
-    if request.user.is_authenticated:
-        is_profiled = Dish.objects.filter(user=request.user, dish=dish1).exists()
-    return render(request, 'restaurant/more_dish.html', context={'is_pro': is_profiled, 'dish1': dish1, 'model': model})
+    dish = get_object_or_404(Dish, pk=pk)
+    model = DishImage.objects.filter(dishes=dish)
+    return render(request, 'restaurant/more_dish.html', context={'dish': dish, 'images': model})
 
 
+@login_required(login_url='login')
 def connect_to_corsina(request):
     cors = Connect.objects.filter(user=request.user)
     return render(request,'restaurant/corsina.html', {'cors': cors})
+
+
+@login_required(login_url='login')
+def connect_create(request, pk):
+    dish = get_object_or_404(Dish, pk=pk)
+    Connect.objects.create(user=request.user, dish=dish)
+    return redirect('/')

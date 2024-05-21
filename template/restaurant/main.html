@@ -50,7 +50,7 @@
           </ul>
         </li>
           <li class="nav-item">
-              <a href="{% url 'corsina' %}">Корзина</a>
+              <a href="{% url 'corsina' %}" class="nav-link active">Корзина</a>
           </li>
       </ul>
     </div>
@@ -58,19 +58,19 @@
 </nav>
 </header>
 {% for el in model %}
+{% for el1 in model1 %}
     <div class="col-md-4 mb-4">
         <div class="card">
-            {% for image in el.images %}
-                <img src="{{ image.image.url.first }}" class="card-img-top" alt="...">
-            {% endfor %}
+                <img src="{{ el1.image.url }}" class="card-img-top" alt="...">
             <div class="card-body">
                 <h5 class="card-title">{{ el.name }}</h5>
                 <p class="card-text">{{ el.info }}</p>
                 <a href="{% url 'more' el.id %}" class="btn btn-primary">Подробнее</a>
-                <button type="button" class="btn btn-dark btn-sm">{{ el.get_status_display }}</button>
+                <button type="button" class="btn btn-dark btn-sm">{{ el.status }}</button>
             </div>
         </div>
     </div>
+{% endfor %}
 {% endfor %}
            <button class="fools">
     <span> < </span>
