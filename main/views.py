@@ -1,6 +1,5 @@
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django_recaptcha.fields import ReCaptchaField
 from .forms import UserCreation, LoginForm
@@ -39,51 +38,85 @@ def logout_view(request):
 
 
 def ListOfDishes(request):
-    model = Dish.objects.all()
-    model1 = DishImage.objects.all()
-    return render(request, 'restaurant/main.html', {'model': model, 'model1': model1[::3]})
+    dishes = Dish.objects.all().prefetch_related('dishimage_set')
+    dishes_with_images = [
+        (dish, dish.dishimage_set.first().image.url if dish.dishimage_set.exists() else None)
+        for dish in dishes
+    ]
+    return render(request, 'restaurant/main.html', {'dishes_with_images': dishes_with_images})
 
 
 def ListOfDishesSoda(request):
-    model = Dish.objects.filter(kind='soda')
-    return render(request, 'restaurant/main.html', {'model': model})
+    dishes = Dish.objects.filter(kind='soda').prefetch_related('dishimage_set')
+    dishes_with_images = [
+        (dish, dish.dishimage_set.first().image.url if dish.dishimage_set.exists() else None)
+        for dish in dishes
+    ]
+    return render(request, 'restaurant/main.html', {'dishes_with_images': dishes_with_images})
 
 
 def ListOfDishesSalat(request):
-    model = Dish.objects.filter(kind='salat')
-    return render(request, 'restaurant/main.html', {'model': model})
+    dishes = Dish.objects.filter(kind='salat').prefetch_related('dishimage_set')
+    dishes_with_images = [
+        (dish, dish.dishimage_set.first().image.url if dish.dishimage_set.exists() else None)
+        for dish in dishes
+    ]
+    return render(request, 'restaurant/main.html', {'dishes_with_images': dishes_with_images})
 
 
 def ListOfDishesTuck(request):
-    model = Dish.objects.filter(kind='tuck')
-    return render(request, 'restaurant/main.html', {'model': model})
+    dishes = Dish.objects.filter(kind='tuck').prefetch_related('dishimage_set')
+    dishes_with_images = [
+        (dish, dish.dishimage_set.first().image.url if dish.dishimage_set.exists() else None)
+        for dish in dishes
+    ]
+    return render(request, 'restaurant/main.html', {'dishes_with_images': dishes_with_images})
 
 
 def ListOfDishesFast(request):
-    model = Dish.objects.filter(kind='fast')
-    return render(request, 'restaurant/main.html', {'model': model})
+    dishes = Dish.objects.filter(kind='fast').prefetch_related('dishimage_set')
+    dishes_with_images = [
+        (dish, dish.dishimage_set.first().image.url if dish.dishimage_set.exists() else None)
+        for dish in dishes
+    ]
+    return render(request, 'restaurant/main.html', {'dishes_with_images': dishes_with_images})
 
 
 def ListOfDishesSec(request):
-    model = Dish.objects.filter(kind='sec')
-    return render(request, 'restaurant/main.html', {'model': model})
+    dishes = Dish.objects.filter(kind='sec').prefetch_related('dishimage_set')
+    dishes_with_images = [
+        (dish, dish.dishimage_set.first().image.url if dish.dishimage_set.exists() else None)
+        for dish in dishes
+    ]
+    return render(request, 'restaurant/main.html', {'dishes_with_images': dishes_with_images})
 
 
 
 def ListOfDishesDesert(request):
-    model = Dish.objects.filter(kind='desert')
-    return render(request, 'restaurant/main.html', {'model': model})
+    dishes = Dish.objects.filter(kind='desert').prefetch_related('dishimage_set')
+    dishes_with_images = [
+        (dish, dish.dishimage_set.first().image.url if dish.dishimage_set.exists() else None)
+        for dish in dishes
+    ]
+    return render(request, 'restaurant/main.html', {'dishes_with_images': dishes_with_images})
 
 
 def ListOfDishesAlco(request):
-    model = Dish.objects.filter(kind='alco')
-    return render(request, 'restaurant/main.html', {'model': model})
+    dishes = Dish.objects.filter(kind='alco').prefetch_related('dishimage_set')
+    dishes_with_images = [
+        (dish, dish.dishimage_set.first().image.url if dish.dishimage_set.exists() else None)
+        for dish in dishes
+    ]
+    return render(request, 'restaurant/main.html', {'dishes_with_images': dishes_with_images})
 
 
 def ListOfDishesFirst(request):
-    model = Dish.objects.filter(kind='first')
-    model1 = DishImage.objects.all()
-    return render(request, 'restaurant/main.html', {'model': model, 'model1': model1[1:3]})
+    dishes = Dish.objects.filter(kind='first').prefetch_related('dishimage_set')
+    dishes_with_images = [
+        (dish, dish.dishimage_set.first().image.url if dish.dishimage_set.exists() else None)
+        for dish in dishes
+    ]
+    return render(request, 'restaurant/main.html', {'dishes_with_images': dishes_with_images})
 
 
 @login_required(login_url='login')
@@ -103,4 +136,4 @@ def connect_to_corsina(request):
 def connect_create(request, pk):
     dish = get_object_or_404(Dish, pk=pk)
     Connect.objects.create(user=request.user, dish=dish)
-    return redirect('/')
+    return render(request, 'restaurant/success.html', context={'dish': dish})
