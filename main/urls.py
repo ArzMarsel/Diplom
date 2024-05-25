@@ -19,4 +19,6 @@ urlpatterns = [
     path('/tuck', views.ListOfDishesTuck, name='tuck'),
     path('corsina/', views.connect_to_corsina, name='corsina'),
     path('create/', views.connect_create, name='create'),
+    path('pay/', views.pay, name='payment'),
+    path('pay/success/', views.success, name='success')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

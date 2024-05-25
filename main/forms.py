@@ -2,6 +2,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
 from django_recaptcha.fields import ReCaptchaField
+from .models import Payment
 
 
 class UserCreation(UserCreationForm):
@@ -73,3 +74,29 @@ class LoginForm(forms.Form):
     class Meta:
         model = User
         fields = ['username', 'password1']
+
+
+class PaymentForm(forms.Form):
+    card_number = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'Card-number'
+            }
+        )
+    )
+    cvc = forms.IntegerField(
+        widget=forms.NumberInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'CVC'
+            }
+        )
+    )
+    data = forms.DateTimeField(
+        widget=forms.DateTimeInput(format="%Y-%m-%d", attrs={"type": "data"}),
+        input_formats=["%Y-%m-%d"])
+
+    class Meta:
+        model = Payment
+        fields = ['card_number', 'cvc', 'date']

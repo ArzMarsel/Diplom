@@ -2,7 +2,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django_recaptcha.fields import ReCaptchaField
-from .forms import UserCreation, LoginForm
+from .forms import UserCreation, LoginForm, PaymentForm
 from .models import Dish, Connect, DishImage
 
 
@@ -137,3 +137,22 @@ def connect_create(request, pk):
     dish = get_object_or_404(Dish, pk=pk)
     Connect.objects.create(user=request.user, dish=dish)
     return render(request, 'restaurant/success.html', context={'dish': dish})
+
+
+@login_required(login_url='login')
+def pay(request):
+    if request.method == 'POST':
+        form = PaymentForm(request.POST, request.FILES)
+        if form.is_valid():
+            payment = form.save()
+            payment.user = request.user
+            payment.save()
+            return redirect('success')
+    else:
+        form = PaymentForm()
+
+    return render(request, 'restaurant/payment.html', {'form': form})
+
+
+def success(requests):
+    return render(requests, 'restaurant/success.html')

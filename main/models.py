@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.core.validators import MinLengthValidator
 from django.db import models
 
 
@@ -37,3 +38,9 @@ class Connect(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     dish = models.ForeignKey(Dish, on_delete=models.CASCADE, blank=True, null=True)
 
+
+class Payment(models.Model):
+    card_number = models.IntegerField(verbose_name='Card-number', max_length=16, validators=[MinLengthValidator(16)])
+    cvc = models.IntegerField(verbose_name='CVC', max_length=3, validators=[MinLengthValidator(3)])
+    date = models.DateField(verbose_name='Date')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='User')

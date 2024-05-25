@@ -16,16 +16,16 @@
     </style></head>
 <body>
 <div class="form-container">
-    <h2 class="text-center mb-4">Логин</h2>
+    <h2 class="text-center text-light mb-4">Логин</h2>
     <form method="post">
         {% csrf_token %}
-    <div class="form-group">
+    <div class="form-group text-light">
          {{ form.username }}
          {{ form.password1 }}
 <!--         {{ form.captcha }}-->
-        <button type="submit" class="btn btn-dark btn-block">Войти</button>
-        <p>Если нет аккаунта, то жмите</p>
-        <a href="{% url 'register' %}" class="btn btn-dark btn-block">Зарегистрироваться</a>
+        <button type="submit" class="btn btn-light btn-block">Войти</button>
+        <p class="text-light">Если нет аккаунта, то жмите</p>
+        <a href="{% url 'register' %}" class="btn btn-light btn-block">Зарегистрироваться</a>
     </div>
     </form>
 </div>

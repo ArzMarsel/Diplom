@@ -67,7 +67,7 @@
         <div id="news-list" class="row">
             {% for dish, image_url in dishes_with_images %}
             <div class="col-md-4">
-                <div class="card bg-dark mb-5 border-0 h-100 d-flex align-items-stretch">
+                <div class="card bg-dark mb-5 mt-3 border-0 h-100 d-flex align-items-stretch text-light">
                     {% if image_url %}
 
             <img src="{{ image_url }}" class="card-img-top" alt="{{ dish.name }}">
@@ -75,17 +75,12 @@
                     <div class="card-body">
             <h5 class="card-title">{{ dish.name }}</h5>
             <p class="card-text">{{ dish.info }}</p>
-            <a href="{% url 'more' dish.id %}" class="btn btn-primary">Подробнее</a>
+            <a href="{% url 'more' dish.id %}" class="btn btn-light">Подробнее</a>
         </div>
-
                 </div>
-
             </div>
-
             {% endfor %}
-
         </div>
-<br>
     </div>
 </div>
            <button class="fools">

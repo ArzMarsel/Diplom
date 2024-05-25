@@ -16,7 +16,7 @@
     </style></head>
 <body>
 <div class="form-container">
-    <h2 class="text-center mb-4">Регистрация</h2>
+    <h2 class="text-center text-light mb-4">Регистрация</h2>
     <form method="post">
         {% csrf_token %}
     <div class="form-group">
@@ -26,9 +26,9 @@
          {{ form.password1 }}
          {{ form.password2 }}
 <!--         {{ form.captcha }}-->
-        <button type="submit" class="btn btn-dark btn-block">Зарегистрироваться</button>
-        <p>Если уже есть аккаунт, то жмите</p>
-        <a href="{% url 'login' %}" class="btn btn-dark btn-block">Войти</a>
+        <button type="submit" class="btn btn-light btn-block">Зарегистрироваться</button>
+        <p class="text-light">Если уже есть аккаунт, то жмите</p>
+        <a href="{% url 'login' %}" class="btn btn-light btn-block">Войти</a>
     </div>
     </form>
 </div>

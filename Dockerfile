@@ -6,9 +6,9 @@ ENV PYTHONUNBUFFERED 1
 
 WORKDIR /app
 
-COPY req.txt /app/
+COPY requirments.txt /app/
 
-RUN pip install -r req.txt
+RUN pip install -r requirments.txt
 
 COPY . /app/
 
