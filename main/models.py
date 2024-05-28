@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from django.core.validators import MinLengthValidator
+from django.core.validators import MinLengthValidator, MinValueValidator
 from django.db import models
 
 
@@ -44,3 +44,4 @@ class Payment(models.Model):
     cvc = models.IntegerField(verbose_name='CVC', max_length=3, validators=[MinLengthValidator(3)])
     date = models.DateField(verbose_name='Date')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='User')
+    price = models.FloatField('Price', validators=[MinValueValidator(1)])

@@ -8,14 +8,17 @@
   <style>
     body {
       background-color: #343a40;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   </style>
 </head>
 <body>
-<div class="card" style="width: 18rem;">
+<div class="card bg-dark" style="width: 40%; position: center" align="center">
   <img src="https://img.freepik.com/free-photo/toy-bricks-table-with-word-success_144627-41213.jpg?size=626&ext=jpg&ga=GA1.1.2082370165.1716336000&semt=ais_user" class="card-img-top" alt="...">
   <div class="card-body">
-    <p class="card-text">Заказано! Можете проверить в <a href="{% url 'corsina' %}">корзине</a>! </p>
+    <h1 class="card-text text-light">Заказано! Можете проверить в <a href="{% url 'corsina' %}">корзине</a>!</h1>
   </div>
 </div>
 </body>
