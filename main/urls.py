@@ -5,9 +5,13 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('login/', views.user_login, name='login'),
+    path('login-l/', views.user_login_l, name='login-l'),
     path('register/', views.register, name='register'),
+    path('register-l/', views.register_l, name='register-l'),
     path('', views.ListOfDishes, name='dishes'),
+    path('light/', views.ListOfDishesLight, name='dishes-l'),
     path('more/<int:pk>', views.DetailDish, name='more'),
+    path('more-l/<int:pk>', views.DetailDish_l, name='more-l'),
     path('logout', views.logout_view, name='logout'),
     path('/soda', views.ListOfDishesSoda, name='soda'),
     path('/alco', views.ListOfDishesAlco, name='alco'),
@@ -17,8 +21,19 @@ urlpatterns = [
     path('/fast', views.ListOfDishesFast, name='fast'),
     path('/salat', views.ListOfDishesSalat, name='salat'),
     path('/tuck', views.ListOfDishesTuck, name='tuck'),
+    path('/soda-l', views.ListOfDishesSoda_l, name='soda-l'),
+    path('/alco-l', views.ListOfDishesAlco_l, name='alco-l'),
+    path('/desert-l', views.ListOfDishesDesert_l, name='desert-l'),
+    path('/first-l', views.ListOfDishesFirst_l, name='first-l'),
+    path('/sec-l', views.ListOfDishesSec_l, name='sec-l'),
+    path('/fast-l', views.ListOfDishesFast_l, name='fast-l'),
+    path('/salat-l', views.ListOfDishesSalat_l, name='salat-l'),
+    path('/tuck-l', views.ListOfDishesTuck_l, name='tuck-l'),
     path('corsina/', views.connect_to_corsina, name='corsina'),
-    path('create/', views.connect_create, name='create'),
+    path('corsina-l/', views.connect_to_corsina_l, name='corsina-l'),
     path('pay/', views.pay, name='payment'),
-    path('pay/success/', views.success, name='success')
+    path('pay-l/', views.pay_l, name='payment-l'),
+    path('pay/success/', views.success, name='success'),
+    path('pay-l/success-l/', views.success_l, name='success-l'),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

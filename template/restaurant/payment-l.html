@@ -8,7 +8,7 @@
   <style>
     body {            display: flex;
             height: 100vh;            margin: 0;
-            background-color: #343a40;
+            background-color: whitesmoke;
       align-items: center;
       justify-content: center;
     }
@@ -38,11 +38,11 @@
 <body>
     <div class="form-container">
         <div class="row">
-            <h2 class="text-center text-light mb-4">Оплата</h2>
+            <h2 class="text-center text-black mb-4">Оплата</h2>
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="row">
-                            <h3 class="text-center text-light">Payment Details</h3>
+                            <h3 class="text-center  text-black">Payment Details</h3>
                             <div class="inlineimage"> <img class="img-responsive images" src="https://cdn0.iconfinder.com/data/icons/credit-card-debit-card-payment-PNG/128/Mastercard-Curved.png"> <img class="img-responsive images" src="https://cdn0.iconfinder.com/data/icons/credit-card-debit-card-payment-PNG/128/Discover-Curved.png"> <img class="img-responsive images" src="https://cdn0.iconfinder.com/data/icons/credit-card-debit-card-payment-PNG/128/Paypal-Curved.png"> <img class="img-responsive images" src="https://cdn0.iconfinder.com/data/icons/credit-card-debit-card-payment-PNG/128/American-Express-Curved.png"> </div>
                         </div>
                     </div>
@@ -64,7 +64,7 @@
                     </div>
                     <div class="panel-footer">
                         <div class="row">
-                            <a class="btn btn-primary mt-2" href="{% url 'success' %}"> Confirm Payment</a>
+                            <a class="btn btn-success mt-2" href="{% url 'success-l' %}"> Confirm Payment</a>
                         </div>
                     </div>
                 </div>

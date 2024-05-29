@@ -57,7 +57,12 @@
           <li class="nav-item">
               <a href="{% url 'corsina' %}" class="nav-link active">Корзина</a>
           </li>
-      </ul>
+        <li class="nav-item" style="align: right">
+            <a href="{% url 'dishes-l' %}">
+                <img src="https://www.publicdomainpictures.net/pictures/100000/nahled/white-sun.jpg" style="width: 5%">
+            </a>
+        </li>
+          </ul>
     </div>
   </div>
 </nav>
@@ -75,7 +80,7 @@
                     <div class="card-body">
             <h5 class="card-title">{{ dish.name }}</h5>
             <p class="card-text">{{ dish.info }}</p>
-            <a href="{% url 'more' dish.id %}" class="btn btn-light">Подробнее</a>
+            <a href="{% url 'more' dish.id %}" class="btn btn-primary">Подробнее</a>
         </div>
                 </div>
             </div>
@@ -83,12 +88,6 @@
         </div>
     </div>
 </div>
-           <button class="fools">
-    <span> < </span>
-  </button>
-  <button class="fools">
-    <span> > </span>
-  </button>
 <footer>
 
 </footer>

@@ -10,25 +10,22 @@
         body {            display: flex;
             align-items: center;            justify-content: center;
             height: 100vh;            margin: 0;
-            background-color: #343a40;
+            background-color: ghostwhite;
         }        .form-container {
             width: 400px;        }
     </style></head>
 <body>
 <div class="form-container">
-    <h2 class="text-center text-light mb-4">Регистрация</h2>
+    <h2 class="text-center text-black mb-4">Логин</h2>
     <form method="post">
         {% csrf_token %}
-    <div class="form-group">
+    <div class="form-group text-black">
          {{ form.username }}
-         {{ form.first_name }}
-         {{ form.last_name }}
          {{ form.password1 }}
-         {{ form.password2 }}
 <!--         {{ form.captcha }}-->
-        <button type="submit" class="btn btn-primary btn-block mt-2">Зарегистрироваться</button>
-        <p class="text-light">Если уже есть аккаунт, то жмите</p>
-        <a href="{% url 'login' %}" class="btn btn-primary btn-block">Войти</a>
+        <button type="submit" class="btn btn-success btn-block mt-2">Войти</button>
+        <p class="text-black">Если нет аккаунта, то жмите</p>
+        <a href="{% url 'register-l' %}" class="btn btn-success btn-block">Зарегистрироваться</a>
     </div>
     </form>
 </div>

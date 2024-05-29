@@ -7,6 +7,10 @@ from .models import Payment
 
 class UserCreation(UserCreationForm):
     # captcha = ReCaptchaField()
+    choises = (
+        ('eng', 'english'),
+        ('rus', 'русский')
+    )
     username = forms.CharField(
         widget=forms.TextInput(
             attrs={
