@@ -2,7 +2,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django_recaptcha.fields import ReCaptchaField
-from .forms import UserCreation, LoginForm, PaymentForm
+from .forms import UserCreation, LoginForm, PaymentForm, ConnectForm
 from .models import Dish, Connect, DishImage
 
 
@@ -43,7 +43,6 @@ def register(request):
         form = UserCreation(request.POST)
         if form.is_valid():
             user = form.save()
-            Connect.objects.create(user=user)
             return redirect('login')
     else:
         form = UserCreation()
@@ -55,7 +54,6 @@ def register_l(request):
         form = UserCreation(request.POST)
         if form.is_valid():
             user = form.save()
-            Connect.objects.create(user=user)
             return redirect('login-l')
     else:
         form = UserCreation()
@@ -65,6 +63,11 @@ def register_l(request):
 def logout_view(request):
     logout(request)
     return redirect('/')
+
+
+def logout_view_l(request):
+    logout(request)
+    return redirect('dishes-l')
 
 
 def ListOfDishes(request):
@@ -235,14 +238,32 @@ def ListOfDishesFirst_l(request):
 def DetailDish(request, pk):
     dish = get_object_or_404(Dish, pk=pk)
     model = DishImage.objects.filter(dishes=dish)
-    return render(request, 'restaurant/more_dish.html', context={'dish': dish, 'images': model})
+    if request.method == 'POST':
+        form = ConnectForm(request.POST)
+        if form.is_valid():
+            con = form.save()
+            con.user = request.user
+            con.dish = dish
+            con.save()
+    else:
+        form = ConnectForm(request.POST)
+    return render(request, 'restaurant/more_dish.html', context={'dish': dish, 'images': model, 'form': form})
 
 
 @login_required(login_url='login-l')
 def DetailDish_l(request, pk):
     dish = get_object_or_404(Dish, pk=pk)
     model = DishImage.objects.filter(dishes=dish)
-    return render(request, 'restaurant/more_dish-l.html', context={'dish': dish, 'images': model})
+    if request.method == 'POST':
+        form = ConnectForm(request.POST)
+        if form.is_valid():
+            con = form.save(commit=False)
+            con.user = request.user
+            con.dish = dish
+            con.save()
+    else:
+        form = ConnectForm(request.POST)
+    return render(request, 'restaurant/more_dish-l.html', context={'dish': dish, 'images': model, 'form': form})
 
 
 @login_required(login_url='login')

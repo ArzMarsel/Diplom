@@ -2,15 +2,11 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
 from django_recaptcha.fields import ReCaptchaField
-from .models import Payment
+from .models import Payment, Connect
 
 
 class UserCreation(UserCreationForm):
     # captcha = ReCaptchaField()
-    choises = (
-        ('eng', 'english'),
-        ('rus', 'русский')
-    )
     username = forms.CharField(
         widget=forms.TextInput(
             attrs={
@@ -85,7 +81,7 @@ class PaymentForm(forms.Form):
         widget=forms.PasswordInput(
             attrs={
                 'class': 'form-control',
-                'placeholder': 'Card-number'
+                'placeholder': 'Номер карты'
             }
         )
     )
@@ -104,3 +100,18 @@ class PaymentForm(forms.Form):
     class Meta:
         model = Payment
         fields = ['card_number', 'cvc', 'date']
+
+
+class ConnectForm(forms.Form):
+    quantity = forms.IntegerField(
+        widget=forms.NumberInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'Кол-во'
+            }
+        )
+    )
+
+    class Meta:
+        model = Connect
+        fields = ['quantity']

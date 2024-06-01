@@ -13,6 +13,7 @@ urlpatterns = [
     path('more/<int:pk>', views.DetailDish, name='more'),
     path('more-l/<int:pk>', views.DetailDish_l, name='more-l'),
     path('logout', views.logout_view, name='logout'),
+    path('logout-l', views.logout_view_l, name='logout-l'),
     path('/soda', views.ListOfDishesSoda, name='soda'),
     path('/alco', views.ListOfDishesAlco, name='alco'),
     path('/desert', views.ListOfDishesDesert, name='desert'),

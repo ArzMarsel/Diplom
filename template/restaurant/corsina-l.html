@@ -32,7 +32,7 @@
           </a>
           <ul class="dropdown-menu bg-white">
               {% if user.is_authenticated %}
-              <li><a class="dropdown-item text-black" href="{% url 'logout' %}">Выход</a></li>
+              <li><a class="dropdown-item text-black" href="{% url 'logout-l' %}">Выход</a></li>
               {% else %}
               <li><a class="dropdown-item text-black" href="{% url 'register-l' %}">Регистрация</a></li>
             <li><a class="dropdown-item text-black" href="{% url 'login-l' %}">Вход</a></li>

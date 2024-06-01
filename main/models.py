@@ -37,6 +37,7 @@ class DishImage(models.Model):
 class Connect(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     dish = models.ForeignKey(Dish, on_delete=models.CASCADE, blank=True, null=True)
+    quantity = models.IntegerField(verbose_name='Кол-во:', blank=True, null=True)
 
 
 class Payment(models.Model):

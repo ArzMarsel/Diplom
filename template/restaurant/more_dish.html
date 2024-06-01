@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -78,7 +78,11 @@
     <span class="visually-hidden">Next</span>
   </button>
 </div>
-<a class="btn btn-primary" href="{% url 'payment' %}">Заказать</a>
+<form method="post">
+        {% csrf_token %}
+    <div style="width: 10%">{{ form.as_p }}</div>
+<button type="submit" class="btn btn-primary">Заказать</button>
+</form>
 
 <footer>
 
