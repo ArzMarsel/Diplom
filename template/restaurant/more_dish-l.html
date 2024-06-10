@@ -76,12 +76,7 @@
     <span class="visually-hidden">Next</span>
   </button>
 </div>
-<form method="post">
-        {% csrf_token %}
-    <div style="width: 10%">{{ form.as_p }}</div>
-<button type="submit" class="btn btn-success">Заказать</button>
-</form>
-
+<a href="{% url 'quan-l' %}" class="btn btn-success">Заказать</a>
 <footer>
 
 

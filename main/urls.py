@@ -36,5 +36,6 @@ urlpatterns = [
     path('pay-l/', views.pay_l, name='payment-l'),
     path('pay/success/', views.success, name='success'),
     path('pay-l/success-l/', views.success_l, name='success-l'),
-
+    path('about_us/', views.about_us, name='about us'),
+    path('about_us_l/', views.about_us_l, name='about us-l'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

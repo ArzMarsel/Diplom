@@ -30,10 +30,14 @@
             Ещё
           </a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="{% url 'register' %}">Регистрация</a></li>
+              {% if user.is_authenticated %}
+              <li><a class="dropdown-item" href="{% url 'logout' %}">Выход</a></li>
+              {% else %}
+              <li><a class="dropdown-item" href="{% url 'register' %}">Регистрация</a></li>
             <li><a class="dropdown-item" href="{% url 'login' %}">Вход</a></li>
+              {% endif %}
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">О нас</a></li>
+            <li><a class="dropdown-item" href="{% url 'about us' %}">О нас</a></li>
           </ul>
         </li>
      <li class="nav-item" style="align: right">
@@ -47,10 +51,9 @@
 </nav>
 </header>
 <div class="row">
-{% for el in cors %}
     <div class="col-md-4 mb-4">
         <div class="card">
-            <img src="{{ el.images }}" class="card-img-top" alt="...">
+            <img src="{{ el.images.image.url.first }}" class="card-img-top" alt="...">
             <div class="card-body">
                 <h5 class="card-title">{{ el.name }}</h5>
                 <p class="card-text">{{ el.info }}</p>
@@ -63,7 +66,6 @@
             </div>
         </div>
     </div>
-{% endfor %}
 </div>
 <footer>
 

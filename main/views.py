@@ -16,7 +16,7 @@ def user_login(request):
                 login(request, user)
                 return redirect('/')
             else:
-                form.add_error(None, 'Ошибка в имени или парол')
+                form.add_error(None, 'Ошибка в имени или пароле')
     else:
         form = LoginForm()
     return render(request, 'register/login.html', {'form': form})
@@ -241,10 +241,7 @@ def DetailDish(request, pk):
     if request.method == 'POST':
         form = ConnectForm(request.POST)
         if form.is_valid():
-            con = form.save()
-            con.user = request.user
-            con.dish = dish
-            con.save()
+            Connect.objects.create(user=request.user, dish=dish, quantity=form.quantity)
     else:
         form = ConnectForm(request.POST)
     return render(request, 'restaurant/more_dish.html', context={'dish': dish, 'images': model, 'form': form})
@@ -254,15 +251,7 @@ def DetailDish(request, pk):
 def DetailDish_l(request, pk):
     dish = get_object_or_404(Dish, pk=pk)
     model = DishImage.objects.filter(dishes=dish)
-    if request.method == 'POST':
-        form = ConnectForm(request.POST)
-        if form.is_valid():
-            con = form.save(commit=False)
-            con.user = request.user
-            con.dish = dish
-            con.save()
-    else:
-        form = ConnectForm(request.POST)
+
     return render(request, 'restaurant/more_dish-l.html', context={'dish': dish, 'images': model, 'form': form})
 
 
@@ -318,3 +307,32 @@ def success(requests):
 
 def success_l(requests):
     return render(requests, 'restaurant/success-l.html')
+
+
+def about_us(request):
+    return render(request, 'restaurant/about us.html')
+
+
+def about_us_l(request):
+    return render(request, 'restaurant/about us-l.html')
+
+
+def quan(request):
+    dish = get_object_or_404()
+    if request.method == 'POST':
+        form = ConnectForm(request.POST)
+        if form.is_valid():
+            Connect.objects.create(user=request.user, dish=dish, quantity=form.quantity)
+    else:
+        form = ConnectForm(request.POST)
+
+
+def quan_l(request):
+    dish = get_object_or_404()
+    if request.method == 'POST':
+        form = ConnectForm(request.POST)
+        if form.is_valid():
+            Connect.objects.create(user=request.user, dish=dish, quantity=form.quantity)
+    else:
+        form = ConnectForm(request.POST)
+    return render(request, 'restaurant/quan-l.html', {})
