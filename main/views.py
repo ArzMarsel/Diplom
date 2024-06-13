@@ -1,5 +1,6 @@
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
+from django.db import Error
 from django.shortcuts import render, redirect, get_object_or_404
 from django_recaptcha.fields import ReCaptchaField
 from .forms import UserCreation, LoginForm, PaymentForm, ConnectForm
@@ -238,27 +239,24 @@ def ListOfDishesFirst_l(request):
 def DetailDish(request, pk):
     dish = get_object_or_404(Dish, pk=pk)
     model = DishImage.objects.filter(dishes=dish)
-    if request.method == 'POST':
-        form = ConnectForm(request.POST)
-        if form.is_valid():
-            Connect.objects.create(user=request.user, dish=dish, quantity=form.quantity)
-    else:
-        form = ConnectForm(request.POST)
-    return render(request, 'restaurant/more_dish.html', context={'dish': dish, 'images': model, 'form': form})
+    return render(request, 'restaurant/more_dish.html', context={'dish': dish, 'images': model})
 
 
 @login_required(login_url='login-l')
 def DetailDish_l(request, pk):
     dish = get_object_or_404(Dish, pk=pk)
     model = DishImage.objects.filter(dishes=dish)
-
-    return render(request, 'restaurant/more_dish-l.html', context={'dish': dish, 'images': model, 'form': form})
+    return render(request, 'restaurant/more_dish-l.html', context={'dish': dish, 'images': model})
 
 
 @login_required(login_url='login')
 def connect_to_corsina(request):
-    cors = Connect.objects.filter(user=request.user)
-    return render(request,'restaurant/corsina.html', {'cors': cors})
+    dishes = Connect.objects.filter(user=request.user).select_related('dish').prefetch_related('dishimage_set')
+    dishes_with_images = [
+        (dish, dish.dishimage_set.first().image.url if dish.dishimage_set.exists() else None)
+        for dish in dishes
+    ]
+    return render(request,'restaurant/corsina.html', {'dishes_with_images': dishes_with_images})
 
 
 @login_required(login_url='login-l')
@@ -317,22 +315,39 @@ def about_us_l(request):
     return render(request, 'restaurant/about us-l.html')
 
 
-def quan(request):
-    dish = get_object_or_404()
+def quan(request, pk):
+    dish = get_object_or_404(Dish, pk=pk)
     if request.method == 'POST':
         form = ConnectForm(request.POST)
         if form.is_valid():
-            Connect.objects.create(user=request.user, dish=dish, quantity=form.quantity)
+            if form.cleaned_data['quantity'] <= dish.quantity:
+                Connect.objects.create(user=request.user, dish=dish, quantity=form.cleaned_data['quantity'])
+                return redirect('dishes')
     else:
-        form = ConnectForm(request.POST)
+        form = ConnectForm()
+    return render(request, 'restaurant/quan.html', {"form": form})
 
 
-def quan_l(request):
-    dish = get_object_or_404()
+def quan_l(request, pk):
+    dish = Dish.objects.get(pk=pk)
     if request.method == 'POST':
         form = ConnectForm(request.POST)
         if form.is_valid():
-            Connect.objects.create(user=request.user, dish=dish, quantity=form.quantity)
+            if form.cleaned_data['quantity'] <= dish.quantity:
+                Connect.objects.create(user=request.user, dish=dish, quantity=form.cleaned_data['quantity'])
+                return redirect('dishes-l')
+            else:
+                return Error('Нельзя заказать такое кол-во этого блюда!')
     else:
         form = ConnectForm(request.POST)
-    return render(request, 'restaurant/quan-l.html', {})
+    return render(request, 'restaurant/quan-l.html', {"form": form})
+
+
+def iseighteen(request, pk):
+    pk = pk
+    return render(request, "restaurant/iseighteen.html", {'pk': pk})
+
+
+def iseighteen_l(request, pk):
+    pk = pk
+    return render(request, "restaurant/iseighteen-l.html", {'pk': pk})

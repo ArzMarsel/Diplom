@@ -80,7 +80,11 @@
                     <div class="card-body">
             <h5 class="card-title">{{ dish.name }}</h5>
             <p class="card-text">{{ dish.info }}</p>
+                        {% if dish.kind == "alco" %}
+            <a href="{% url 'is18' dish.id %}" class="btn btn-primary">Подробнее</a>
+                        {% else %}
             <a href="{% url 'more' dish.id %}" class="btn btn-primary">Подробнее</a>
+                        {% endif %}
         </div>
                 </div>
             </div>

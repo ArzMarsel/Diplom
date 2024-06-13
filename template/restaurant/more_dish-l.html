@@ -63,7 +63,6 @@
     {% for image in images %}
       <div class="carousel-item {% if forloop.first %}active{% endif %}">
         <img src="{{ image.image.url }}" class="d-block w-100" alt="...">
-        <h4 class="text-black">{{ dish.info }}</h4>
       </div>
     {% endfor %}
   </div>
@@ -76,7 +75,8 @@
     <span class="visually-hidden">Next</span>
   </button>
 </div>
-<a href="{% url 'quan-l' %}" class="btn btn-success">Заказать</a>
+<h4 class="text-black" style="width: 50%">{{ dish.info }}</h4>
+<a href="{% url 'quan-l' dish.id %}" class="btn btn-success">Заказать</a>
 <footer>
 
 
