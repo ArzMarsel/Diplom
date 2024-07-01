@@ -26,7 +26,8 @@ SECRET_KEY = 'django-insecure-8@bkd1-&k9fte1soky=#d_yk2*c=3a^=vfka#ipolla*14#vnk
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'rest-aurant.student-project-it-academy.tw1.ru'
+    'rest-aurant.student-project-it-academy.tw1.ru',
+    'localhost', '127.0.0.1'
 ]
 
 CSRF_TRUSTED_ORIGINS = [
