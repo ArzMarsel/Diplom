@@ -256,13 +256,17 @@ def connect_to_corsina(request):
         (dish, dish.dishimage_set.first().image.url if dish.dishimage_set.exists() else None)
         for dish in dishes
     ]
-    return render(request,'restaurant/corsina.html', {'dishes_with_images': dishes_with_images})
+    return render(request, 'restaurant/corsina.html', {'dishes_with_images': dishes_with_images})
 
 
 @login_required(login_url='login-l')
 def connect_to_corsina_l(request):
-    cors = Connect.objects.filter(user=request.user)
-    return render(request,'restaurant/corsina-l.html', {'cors': cors})
+    dishes = Connect.objects.filter(user=request.user).select_related('dish').prefetch_related('dishimage_set')
+    dishes_with_images = [
+        (dish, dish.dishimage_set.first().image.url if dish.dishimage_set.exists() else None)
+        for dish in dishes
+    ]
+    return render(request, 'restaurant/corsina-l.html', {'dishes_with_images': dishes_with_images})
 
 
 @login_required(login_url='login')
