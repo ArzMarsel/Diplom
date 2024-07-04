@@ -1,6 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
+from django.core.validators import MinLengthValidator, MinValueValidator, MaxLengthValidator
 from django_recaptcha.fields import ReCaptchaField
 from .models import Payment, Connect
 
@@ -78,6 +79,7 @@ class LoginForm(forms.Form):
 
 class PaymentForm(forms.Form):
     card_number = forms.CharField(
+        validators=[MinLengthValidator(16)],
         widget=forms.PasswordInput(
             attrs={
                 'class': 'form-control',
@@ -86,6 +88,7 @@ class PaymentForm(forms.Form):
         )
     )
     cvc = forms.IntegerField(
+        validators=[MaxLengthValidator(3)],
         widget=forms.NumberInput(
             attrs={
                 'class': 'form-control',
@@ -93,13 +96,25 @@ class PaymentForm(forms.Form):
             }
         )
     )
-    data = forms.DateTimeField(
-        widget=forms.DateTimeInput(format="%Y-%m-%d", attrs={"type": "data"}),
-        input_formats=["%Y-%m-%d"])
+    price = forms.FloatField(
+        validators=[MinValueValidator(1)],
+        widget=forms.NumberInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'Price'
+            }
+        )
+    )
 
     class Meta:
         model = Payment
-        fields = ['card_number', 'cvc', 'date']
+        fields = ['card_number', 'cvc', 'price']
+
+    def save(self, commit=True):
+        payment = super().save(commit=False)
+        if commit:
+            payment.save()
+        return payment
 
 
 class ConnectForm(forms.Form):
