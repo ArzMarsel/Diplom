@@ -27,7 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'rest-aurant.student-project-it-academy.tw1.ru',
-    'localhost', '127.0.0.1'
+    'www.rest-aurant.student-project-it-academy.tw1.ru',
+    '127.0.0.1'
 ]
 
 CSRF_TRUSTED_ORIGINS = [
