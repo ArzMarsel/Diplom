@@ -256,7 +256,7 @@ def connect_to_corsina(request):
         (i, i.dish, i.dish.dishimage_set.first().image.url if i.dish.dishimage_set.exists() else None)
         for i in dishes
     ]
-    return render(request,'restaurant/corsina.html', {'dishes_with_images': dishes_with_images})
+    return render(request, 'restaurant/corsina.html', {'dishes_with_images': dishes_with_images})
 
 
 @login_required(login_url='login-l')
