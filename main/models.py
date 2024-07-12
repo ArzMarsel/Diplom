@@ -38,6 +38,7 @@ class Connect(models.Model):
     dish = models.ForeignKey(Dish, on_delete=models.CASCADE, blank=True, null=True)
     quantity = models.IntegerField(verbose_name='Кол-во:', blank=True, null=True)
     status = models.CharField(verbose_name='Status:', max_length=30, choices=Choices_list)
+    mark = models.BooleanField(verbose_name='mark:')
 
     def disconnect(self, user):
         if self.user == user:
@@ -45,8 +46,9 @@ class Connect(models.Model):
 
 
 class Payment(models.Model):
-    card_number = models.IntegerField(verbose_name='Card-number', max_length=16, validators=[MinLengthValidator(16), MaxLengthValidator(16)])
-    cvc = models.IntegerField(verbose_name='CVC', max_length=3, validators=[MinLengthValidator(3), MaxLengthValidator(3)])
-    date = models.DateField(verbose_name='Date', auto_now_add=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='User')
-    price = models.FloatField('Price', validators=[MinValueValidator(1)])
+    card_number = models.CharField('Card number', max_length=16, validators=[MinLengthValidator(16)])
+    cvc = models.CharField('CVC', max_length=3, validators=[MinLengthValidator(3)])
+    date = models.DateField('Date', auto_now_add=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='payments')
+    connect = models.ForeignKey(Connect, on_delete=models.CASCADE, related_name='payments', verbose_name='Connect')
+    price = models.FloatField('Price', validators=[MinValueValidator(1.0)])

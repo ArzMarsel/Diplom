@@ -77,44 +77,14 @@ class LoginForm(forms.Form):
         fields = ['username', 'password1']
 
 
-class PaymentForm(forms.Form):
-    card_number = forms.CharField(
-        validators=[MinLengthValidator(16)],
-        widget=forms.PasswordInput(
-            attrs={
-                'class': 'form-control',
-                'placeholder': 'Номер карты'
-            }
-        )
-    )
-    cvc = forms.IntegerField(
-        validators=[MaxLengthValidator(3)],
-        widget=forms.NumberInput(
-            attrs={
-                'class': 'form-control',
-                'placeholder': 'CVC'
-            }
-        )
-    )
-    price = forms.FloatField(
-        validators=[MinValueValidator(1)],
-        widget=forms.NumberInput(
-            attrs={
-                'class': 'form-control',
-                'placeholder': 'Price'
-            }
-        )
-    )
-
+class PaymentForm(forms.ModelForm):
     class Meta:
         model = Payment
-        fields = ['card_number', 'cvc', 'price']
-
-    def save(self, commit=True):
-        payment = super().save(commit=False)
-        if commit:
-            payment.save()
-        return payment
+        fields = ['card_number', 'cvc']
+        widgets = {
+            'card_number': forms.TextInput(attrs={'placeholder': '1234567890123456', 'autocomplete': 'cc-number'}),
+            'cvc': forms.TextInput(attrs={'placeholder': '123', 'autocomplete': 'cc-csc'}),
+        }
 
 
 class ConnectForm(forms.Form):

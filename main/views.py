@@ -33,7 +33,7 @@ def user_login_l(request):
                 login(request, user)
                 return redirect('dishes-l')
             else:
-                form.add_error(None, 'Ошибка в имени или парол')
+                form.add_error(None, 'Ошибка в имени или пароле')
     else:
         form = LoginForm()
     return render(request, 'register/login-l.html', {'form': form})
@@ -251,51 +251,81 @@ def DetailDish_l(request, pk):
 
 @login_required(login_url='login')
 def connect_to_corsina(request):
-    dishes = Connect.objects.filter(user=request.user).select_related('dish').prefetch_related('dishimage_set')
+    dishes = Connect.objects.filter(user=request.user, mark=True).select_related('dish').prefetch_related('dish__dishimage_set')
     dishes_with_images = [
-        (dish, dish.dishimage_set.first().image.url if dish.dishimage_set.exists() else None)
-        for dish in dishes
+        (i, i.dish, i.dish.dishimage_set.first().image.url if i.dish.dishimage_set.exists() else None)
+        for i in dishes
     ]
     return render(request, 'restaurant/corsina.html', {'dishes_with_images': dishes_with_images})
 
 
 @login_required(login_url='login-l')
 def connect_to_corsina_l(request):
-    dishes = Connect.objects.filter(user=request.user).select_related('dish').prefetch_related('dishimage_set')
+    dishes = Connect.objects.filter(user=request.user, mark=True).select_related('dish').prefetch_related('dish__dishimage_set')
     dishes_with_images = [
-        (dish, dish.dishimage_set.first().image.url if dish.dishimage_set.exists() else None)
-        for dish in dishes
+        (i, i.dish, i.dish.dishimage_set.first().image.url if i.dish.dishimage_set.exists() else None)
+        for i in dishes
     ]
     return render(request, 'restaurant/corsina-l.html', {'dishes_with_images': dishes_with_images})
 
 
 @login_required(login_url='login')
+def connect_to_saled(request):
+    dishes = Connect.objects.filter(user=request.user, mark=False).select_related('dish').prefetch_related('dish__dishimage_set')
+    dishes_with_images = [
+        (i, i.dish, i.dish.dishimage_set.first().image.url if i.dish.dishimage_set.exists() else None)
+        for i in dishes
+    ]
+    return render(request, 'restaurant/saled.html', {'dishes_with_images': dishes_with_images})
+
+
+@login_required(login_url='login-l')
+def connect_to_saled_l(request):
+    dishes = Connect.objects.filter(user=request.user, mark=False).select_related('dish').prefetch_related('dish__dishimage_set')
+    dishes_with_images = [
+        (i, i.dish, i.dish.dishimage_set.first().image.url if i.dish.dishimage_set.exists() else None)
+        for i in dishes
+    ]
+    return render(request, 'restaurant/saled-l.html', {'dishes_with_images': dishes_with_images})
+
+
+@login_required(login_url='login')
 def pay(request, pk):
+    dish = get_object_or_404(Dish, pk=pk)
+    connect = get_object_or_404(Connect, user=request.user, dish=dish)
     if request.method == 'POST':
-        form = PaymentForm(request.POST, request.FILES)
+        form = PaymentForm(request.POST)
         if form.is_valid():
-            payment = form.save()
+            payment = form.save(commit=False)
             payment.user = request.user
+            payment.connect = get_object_or_404(Connect, user=request.user, dish=dish, mark=True)
+            payment.price = dish.price
             payment.save()
-            dish = get_object_or_404(Dish, pk=pk)
-            Connect.objects.create(user=request.user, dish=dish)
+            connect.status = 'accepted'
+            connect.mark = False
+            connect.save()
             return redirect('success')
     else:
         form = PaymentForm()
 
-    return render(request, 'restaurant/payment.html', {'form': form})
+    return render(request, 'restaurant/payment.html', {'form': form, 'dish': dish})
 
 
 @login_required(login_url='login-l')
 def pay_l(request, pk):
+    dish = get_object_or_404(Dish, pk=pk)
+    connect = get_object_or_404(Connect, user=request.user, dish=dish)
     if request.method == 'POST':
-        form = PaymentForm(request.POST, request.FILES)
+        form = PaymentForm(request.POST)
         if form.is_valid():
-            payment = form.save()
+            payment = form.save(commit=False)
             payment.user = request.user
+            payment.connect = get_object_or_404(Connect, user=request.user, dish=dish, mark=True)
+            payment.price = dish.price
             payment.save()
-            dish = get_object_or_404(Dish, pk=pk)
-            Connect.objects.create(user=request.user, dish=dish)
+            connect.status = 'accepted'
+            connect.mark = False
+            connect.save()
             return redirect('success')
     else:
         form = PaymentForm()
@@ -325,7 +355,7 @@ def quan(request, pk):
         form = ConnectForm(request.POST)
         if form.is_valid():
             if form.cleaned_data['quantity'] <= dish.quantity:
-                Connect.objects.create(user=request.user, dish=dish, quantity=form.cleaned_data['quantity'])
+                Connect.objects.create(user=request.user, dish=dish, quantity=form.cleaned_data['quantity'], mark=True)
                 return redirect('dishes')
     else:
         form = ConnectForm()
@@ -333,15 +363,13 @@ def quan(request, pk):
 
 
 def quan_l(request, pk):
-    dish = Dish.objects.get(pk=pk)
+    dish = get_object_or_404(Dish, pk=pk)
     if request.method == 'POST':
         form = ConnectForm(request.POST)
         if form.is_valid():
             if form.cleaned_data['quantity'] <= dish.quantity:
                 Connect.objects.create(user=request.user, dish=dish, quantity=form.cleaned_data['quantity'])
                 return redirect('dishes-l')
-            else:
-                return Error('Нельзя заказать такое кол-во этого блюда!')
     else:
         form = ConnectForm(request.POST)
     return render(request, 'restaurant/quan-l.html', {"form": form})
