@@ -353,9 +353,18 @@ def quan(request, pk):
     dish = get_object_or_404(Dish, pk=pk)
     if request.method == 'POST':
         form = ConnectForm(request.POST)
+        form.dish = get_object_or_404(Dish, pk=pk)
+        form.user = request.user
+        form.mark = True
+        form.status = 'done'
         if form.is_valid():
             if form.cleaned_data['quantity'] <= dish.quantity:
-                Connect.objects.create(user=request.user, dish=dish, quantity=form.cleaned_data['quantity'], mark=True)
+                connect = form.save(commit=False)
+                connect.user = request.user
+                connect.mark = True
+                connect.status = 'done'
+                connect.dish = dish
+                connect.save()
                 return redirect('dishes')
     else:
         form = ConnectForm()
@@ -366,12 +375,21 @@ def quan_l(request, pk):
     dish = get_object_or_404(Dish, pk=pk)
     if request.method == 'POST':
         form = ConnectForm(request.POST)
+        form.dish = get_object_or_404(Dish, pk=pk)
+        form.user = request.user
+        form.mark = True
+        form.status = 'done'
         if form.is_valid():
             if form.cleaned_data['quantity'] <= dish.quantity:
-                Connect.objects.create(user=request.user, dish=dish, quantity=form.cleaned_data['quantity'])
+                connect = form.save(commit=False)
+                connect.user = request.user
+                connect.mark = True
+                connect.status = 'done'
+                connect.dish = dish
+                connect.save()
                 return redirect('dishes-l')
     else:
-        form = ConnectForm(request.POST)
+        form = ConnectForm()
     return render(request, 'restaurant/quan-l.html', {"form": form})
 
 

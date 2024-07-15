@@ -82,12 +82,12 @@ class PaymentForm(forms.ModelForm):
         model = Payment
         fields = ['card_number', 'cvc']
         widgets = {
-            'card_number': forms.TextInput(attrs={'placeholder': '1234567890123456', 'autocomplete': 'cc-number'}),
-            'cvc': forms.TextInput(attrs={'placeholder': '123', 'autocomplete': 'cc-csc'}),
+            'card_number': forms.TextInput(attrs={'placeholder': 'Номер карты', 'autocomplete': 'cc-number'}),
+            'cvc': forms.TextInput(attrs={'placeholder': 'CVC', 'autocomplete': 'cc-csc'}),
         }
 
 
-class ConnectForm(forms.Form):
+class ConnectForm(forms.ModelForm):
     quantity = forms.IntegerField(
         widget=forms.NumberInput(
             attrs={
@@ -100,3 +100,5 @@ class ConnectForm(forms.Form):
     class Meta:
         model = Connect
         fields = ['quantity']
+
+
